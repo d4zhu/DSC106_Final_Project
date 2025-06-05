@@ -6,6 +6,59 @@ const width = +svg.attr("width") - margin.left - margin.right;
 const height = +svg.attr("height") - margin.top - margin.bottom;
 const chartGroup = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
+ // ===== AXIS LABELS =====
+chartGroup.selectAll(".axis-label").remove();
+
+// X-axis label
+chartGroup.append("text")
+  .attr("class", "axis-label")
+  .attr("x", width / 2)
+  .attr("y", height + 40)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "14px")
+  .text("Time of Day");
+
+// Y-axis label
+chartGroup.append("text")
+  .attr("class", "axis-label")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -height / 2)
+  .attr("y", -45)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "14px")
+  .text("Glucose Level (mg/dL)");
+
+// ===== LEGEND =====
+svg.selectAll(".legend").remove();
+const legend = svg.append("g")
+  .attr("class", "legend")
+  .attr("transform", `translate(${margin.left}, 20)`);
+
+legend.append("line")
+  .attr("x1", 0).attr("x2", 20)
+  .attr("y1", 0).attr("y2", 0)
+  .attr("stroke", "#3b82f6")
+  .attr("stroke-width", 2);
+
+legend.append("text")
+  .attr("x", 30)
+  .attr("y", 5)
+  .attr("font-size", "12px")
+  .text("Glucose Level");
+
+legend.append("line")
+  .attr("x1", 0).attr("x2", 20)
+  .attr("y1", 20).attr("y2", 20)
+  .attr("stroke", "#f59e0b")
+  .attr("stroke-width", 1)
+  .attr("stroke-dasharray", "4 2");
+
+legend.append("text")
+  .attr("x", 30)
+  .attr("y", 25)
+  .attr("font-size", "12px")
+  .text("Food Logged");
+
 const tooltip = d3.select("body").append("div")
   .attr("class", "tooltip").style("opacity", 0);
 

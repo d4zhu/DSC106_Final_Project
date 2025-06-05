@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Glucose Scatter Plot</title>
+  <link rel="stylesheet" href="scatter.css"/>
+  <script src="scatter.js" type="module"></script>
+</head>
+<body>
+  <h1>Glucose Mean vs. Standard Deviation</h1>
+
+  <div id="chart-container">
+    <svg id="scatter" width="850" height="500"></svg>
+  </div>
+
+  <h2 style="margin-top: 2rem; color: #1e3a8a;">Selected Glucose Trend (Post-Breakfast)</h2>
+  <div id="trend-container" class="card">
+    <svg id="glucose-trend" width="850" height="400"></svg>
+  </div>
+
+  <div class="page-nav">
+    <a href="../third_page_test/explorer.html" class="arrow left" title="Go to Game">&#8592;</a>
+  </div>
+
+  <div id="tooltip" class="tooltip" style="opacity: 0;"></div>
+</body>
+</html>
