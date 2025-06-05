@@ -141,15 +141,15 @@ h2 {
 
 /* Card Themes */
 .card.normal .card-front {
-  background: linear-gradient(to right, #059669, #10b981);
+  background: linear-gradient(to right, #bbf7d0, #86efac);
 }
 
 .card.prediabetic .card-front {
-  background: linear-gradient(to right, #d97706, #fbbf24);
+  background: linear-gradient(to right, #fde68a, #fcd34d);
 }
 
 .card.diabetic .card-front {
-  background: linear-gradient(to right, #dc2626, #f87171);
+  background: linear-gradient(to right, #fca5a5, #f87171);
 }
 
 /* Flip Animation */
