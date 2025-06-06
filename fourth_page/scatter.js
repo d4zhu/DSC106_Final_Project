@@ -271,3 +271,14 @@ conclusion.innerHTML = `
 chartContainer.parentNode.appendChild(conclusion);
 
 
+const mashImage = document.getElementById("mash-potato");
+const mashHint = document.getElementById("mash-hint");
+let poked = false;
+
+if (mashImage && mashHint) {
+  mashImage.addEventListener("click", () => {
+    poked = !poked;
+    mashImage.src = poked ? "../assets/mash_nervous_poke.png" : "../assets/mash_default.png";
+    mashHint.classList.toggle("visible");
+  });
+}
