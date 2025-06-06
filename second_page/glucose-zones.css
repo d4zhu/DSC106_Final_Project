@@ -158,8 +158,6 @@ h2 {
 }
 
 
-
-
 /* Flip Animation */
 .card:hover .card-front {
   transform: rotateY(180deg);

@@ -113,7 +113,7 @@ d3.csv("../glucose_summary.csv").then(data => {
     const svg = d3.select("#glucose-trend");
     svg.selectAll("*").remove();
 
-    const margin = { top: 20, right: 40, bottom: 30, left: 90 },
+    const margin = { top: 20, right: 40, bottom: 60, left: 90 },
           width = +svg.attr("width") - margin.left - margin.right,
           height = +svg.attr("height") - margin.top - margin.bottom,
           g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
@@ -141,26 +141,9 @@ d3.csv("../glucose_summary.csv").then(data => {
         .domain([0, d3.max(allPoints, d => d.minutes_after_meal)])
         .range([0, width]);
 
-      g.append("text")
-       .attr("x", width / 2)
-       .attr("y", height + 50)
-       .attr("text-anchor", "middle")
-       .attr("font-size", "14px")
-       .attr("fill", "#374151")
-       .text("Minutes After Meal");
-
       const y = d3.scaleLinear()
         .domain([d3.min(allPoints, d => d.glucose) - 10, d3.max(allPoints, d => d.glucose) + 10])
         .range([height, 0]);
-
-      g.append("text")
-       .attr("transform", "rotate(-90)")
-       .attr("x", -height / 2)
-       .attr("y", -45)
-       .attr("text-anchor", "middle")
-       .attr("font-size", "14px")
-       .attr("fill", "#374151")
-       .text("Glucose (mg/dL)");
 
       g.append("g")
         .attr("transform", `translate(0,${height})`)
@@ -169,14 +152,75 @@ d3.csv("../glucose_summary.csv").then(data => {
       g.append("g")
         .call(d3.axisLeft(y));
 
-      g.append("rect")
-        .attr("clip-path", "url(#clip-area)")
-        .attr("x", 0)
-        .attr("y", y(140))
-        .attr("width", width)
-        .attr("height", y(70) - y(140))
-        .attr("fill", "#d1fae5")
-        .attr("opacity", 0.2);
+      // X-axis label
+      g.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 45)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "14px")
+        .attr("fill", "#374151")
+        .text("Time After Standard Breakfast");
+
+      // Y-axis label
+      g.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -60)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "14px")
+        .attr("fill", "#374151")
+        .text("Glucose Level (mg/dL)");
+
+      // Orange postprandial threshold line
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", y(140))
+        .attr("y2", y(140))
+        .attr("stroke", "orange")
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", "5 4");
+
+      // Orange legend
+      g.append("line")
+        .attr("x1", width - 160)
+        .attr("x2", width - 140)
+        .attr("y1", 10)
+        .attr("y2", 10)
+        .attr("stroke", "orange")
+        .attr("stroke-dasharray", "5 4")
+        .attr("stroke-width", 2);
+
+      g.append("text")
+        .attr("x", width - 135)
+        .attr("y", 14)
+        .attr("fill", "#374151")
+        .attr("font-size", "0.9rem")
+        .text("Postprandial threshold (140 mg/dL)");
+
+      // Max difference computation
+      let maxDiff = 0;
+      for (let i = 0; i < datasets[0].length; i++) {
+        const g1 = datasets[0][i].glucose;
+        const g2 = datasets[1][i].glucose;
+        const diff = Math.abs(g1 - g2);
+        if (!isNaN(diff) && diff > maxDiff) {
+          maxDiff = diff;
+        }
+      }
+
+      // Bottom-right max difference label
+      d3.select("#glucose-trend")
+  .append("text")
+  .attr("x", +d3.select("#glucose-trend").attr("width") - 20)
+  .attr("y", +d3.select("#glucose-trend").attr("height") - 10)
+  .attr("text-anchor", "end")
+  .attr("fill", "#fca5a5") // even softer red
+  .attr("font-weight", "400")
+  .attr("font-size", "14px")
+  .text(`Max glucose difference: ${maxDiff.toFixed(1)} mg/dL`);
+
+
 
       datasets.forEach((dataset, i) => {
         const line = d3.line()
