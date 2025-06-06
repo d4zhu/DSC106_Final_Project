@@ -199,7 +199,7 @@ function showResults() {
     container.append("svg")
       .attr("id", canvasId)
       .attr("width", 1000)
-      .attr("height", 400);
+      .attr("height", 450);
 
     renderResultChart(canvasId, id, profile?.hba1c);
   });
@@ -218,9 +218,9 @@ function renderResultChart(canvasId, personId, hba1c) {
     svg.attr("viewBox", `0 0 1000 400`)
       .attr("preserveAspectRatio", "xMidYMid meet");
 
-    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-    const width = 1000 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const margin = { top: 0, right: 20, bottom: 30, left: 50 };
+    const width = 975 - margin.left - margin.right;
+    const height = 410 - margin.top - margin.bottom;
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
     const x = d3.scaleTime().range([0, width]).domain(d3.extent(data, d => d.time));
@@ -234,7 +234,26 @@ function renderResultChart(canvasId, personId, hba1c) {
     g.append("g").attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x).ticks(d3.timeHour.every(2)).tickFormat(d3.timeFormat("%-I %p")));
 
+    // X-axis label
+    g.append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", width / 2)
+      .attr("y", height + margin.bottom + 10)
+      .attr("fill", "#374151")
+      .attr("font-size", "0.9rem")
+      .text("Time of Day");
+
     g.append("g").call(d3.axisLeft(y));
+        
+    // Y-axis label
+    g.append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", `rotate(-90)`)
+      .attr("x", -height / 2)
+      .attr("y", -margin.left + 15)
+      .attr("fill", "#374151")
+      .attr("font-size", "0.9rem")
+      .text("Glucose Level (mg/dL)");
 
     const zoneDefs = [
       { min: 70, max: 99, color: "#d1fae5" },

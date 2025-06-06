@@ -14,7 +14,7 @@ body {
   align-items: center;
   padding: 3rem 1.5rem;
   line-height: 1.6;
-  background-image: url('/assets/106_final_background_2.jpg');
+  background-image: url('../assets/106_final_background_2.jpg');
   background-size: cover;         /* Make sure it fills the screen */
   background-repeat: no-repeat;   /* No tiling */
   background-attachment: fixed;   /* Optional: stays fixed when scrolling */
@@ -141,16 +141,24 @@ h2 {
 
 /* Card Themes */
 .card.normal .card-front {
-  background: linear-gradient(to right, #bbf7d0, #86efac);
+  background: #bbf7d0; /* soft green */
 }
 
 .card.prediabetic .card-front {
-  background: linear-gradient(to right, #fde68a, #fcd34d);
+  background: #fde68a; /* soft yellow */
 }
 
 .card.diabetic .card-front {
-  background: linear-gradient(to right, #fca5a5, #f87171);
+  background: #fecaca; /* soft red */
 }
+
+.card-front h3,
+.card-front p {
+  text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.35);
+}
+
+
+
 
 /* Flip Animation */
 .card:hover .card-front {
