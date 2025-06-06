@@ -256,6 +256,7 @@ conclusion.style.padding = "2rem";
 conclusion.style.marginTop = "3rem";
 conclusion.style.background = "#fefce8"; 
 conclusion.style.borderRadius = "16px";
+conclusion.style.maxWidth = "900px";
 conclusion.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.06)";
 conclusion.style.textAlign = "left"; // ensures left alignment
 
