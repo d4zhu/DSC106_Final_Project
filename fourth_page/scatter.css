@@ -7,7 +7,7 @@ body {
   margin: 0;
   padding: 2rem;
   text-align: center;
-  background-image: url('../assets/106_final_background_2.png');
+  background-image: url('../assets/106_final_background.png');
   background-size: cover;         /* Make sure it fills the screen */
   background-repeat: no-repeat;   /* No tiling */
   background-attachment: fixed;   /* Optional: stays fixed when scrolling */
