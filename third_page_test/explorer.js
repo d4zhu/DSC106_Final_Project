@@ -322,7 +322,7 @@ let poked = false;
 if (mashImage && mashHint) {
   mashImage.addEventListener("click", () => {
     poked = !poked;
-    mashImage.src = poked ? "../assets/mash_nerd_poke.png" : "../assets/mash_nerd_default.png";
+    mashImage.src = poked ? "../assets/mash_nerd_poke.png" : "../assets/mash_default.png";
     mashHint.classList.toggle("visible");
   });
 }
