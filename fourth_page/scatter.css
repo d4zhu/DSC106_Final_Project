@@ -1,6 +1,5 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom right, #cffafe, #b5d6ff);
   color: #374151;
   display: flex;
   flex-direction: column;
@@ -8,6 +7,22 @@ body {
   margin: 0;
   padding: 2rem;
   text-align: center;
+  background-image: url('/assets/106_final_background_2.jpg');
+  background-size: cover;         /* Make sure it fills the screen */
+  background-repeat: no-repeat;   /* No tiling */
+  background-attachment: fixed;   /* Optional: stays fixed when scrolling */
+  background-position: center; 
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.6); /* semi-transparent white */
+  z-index: -1; /* behind everything */
 }
 
 /* Title */
