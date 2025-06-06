@@ -6,7 +6,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url('assets/106_final_background_2.jpg');
+  background-image: url('assets/106_final_background_2.png');
   background-size: cover;         /* Make sure it fills the screen */
   background-repeat: no-repeat;   /* No tiling */
   background-attachment: fixed;   /* Optional: stays fixed when scrolling */
