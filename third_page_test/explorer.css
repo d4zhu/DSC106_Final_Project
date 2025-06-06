@@ -227,6 +227,13 @@ p {
   margin-right: 1rem;
 }
 
+.result-explanation {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #374151;
+  max-width: 750px;
+}
+
 .quiz-progress {
   font-size: 1.2rem;
   color: #374151;
