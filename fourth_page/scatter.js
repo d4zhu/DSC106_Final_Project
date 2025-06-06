@@ -250,3 +250,24 @@ d3.csv("../glucose_summary.csv").then(data => {
   }
 });
 
+const chartContainer = document.querySelector("#trend-container");
+const conclusion = document.createElement("div");
+conclusion.style.padding = "2rem";
+conclusion.style.marginTop = "3rem";
+conclusion.style.background = "#fefce8"; 
+conclusion.style.borderRadius = "16px";
+conclusion.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.06)";
+conclusion.style.textAlign = "left"; // ensures left alignment
+
+conclusion.innerHTML = `
+  <p style="margin-bottom: 1rem;">
+    The postprandial threshold represents the maximum glucose level that should be reached after meals in healthy individuals—typically 140 mg/dL. This visualization shows that average glucose is a strong predictor of post-meal spikes, while standard deviation appears to have minimal influence on spike height.
+  </p>
+  <p style="margin-bottom: 1rem;">
+    Ultimately, this suggests that diet alone doesn't explain glucose variability. Individuals with similar meals can have very different responses depending on their baseline glucose levels. We hope to spread awareness that managing diabetes risk requires a comprehensive, individualized approach.
+  </p>
+`;
+
+chartContainer.parentNode.appendChild(conclusion);
+
+
