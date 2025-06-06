@@ -226,3 +226,10 @@ p {
 .arrow.right {
   margin-right: 1rem;
 }
+
+.result-explanation {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #374151;
+  max-width: 750px;
+}

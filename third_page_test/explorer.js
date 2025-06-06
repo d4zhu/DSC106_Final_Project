@@ -6,10 +6,8 @@ const width = +svg.attr("width") - margin.left - margin.right;
 const height = +svg.attr("height") - margin.top - margin.bottom;
 const chartGroup = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
- // ===== AXIS LABELS =====
 chartGroup.selectAll(".axis-label").remove();
 
-// X-axis label
 chartGroup.append("text")
   .attr("class", "axis-label")
   .attr("x", width / 2)
@@ -18,7 +16,6 @@ chartGroup.append("text")
   .attr("font-size", "14px")
   .text("Time of Day");
 
-// Y-axis label
 chartGroup.append("text")
   .attr("class", "axis-label")
   .attr("transform", "rotate(-90)")
@@ -28,7 +25,6 @@ chartGroup.append("text")
   .attr("font-size", "14px")
   .text("Glucose Level (mg/dL)");
 
-// ===== LEGEND =====
 svg.selectAll(".legend").remove();
 const legend = svg.append("g")
   .attr("class", "legend")
@@ -60,7 +56,15 @@ legend.append("text")
   .text("Food Logged");
 
 const tooltip = d3.select("body").append("div")
-  .attr("class", "tooltip").style("opacity", 0);
+  .attr("class", "tooltip")
+  .style("opacity", 0)
+  .style("position", "absolute")
+  .style("pointer-events", "none")
+  .style("background", "#fff")
+  .style("padding", "0.5em 0.75em")
+  .style("border-radius", "6px")
+  .style("box-shadow", "0 2px 8px rgba(0,0,0,0.1)")
+  .style("font-size", "0.9rem");
 
 const x = d3.scaleTime().range([0, width]);
 const y = d3.scaleLinear().range([height, 0]).domain([50, 230]);
@@ -79,6 +83,12 @@ const profiles = [
   { id: "04", label: "diabetic", hba1c: "7.5%" }
 ];
 
+const explanationMap = {
+  "normal": "This person maintains glucose levels mostly within the healthy fasting range throughout the day, with controlled responses to food. We notice that glucose levels rise after meals but return to baseline quickly, indicating good glucose regulation. Also, their fluctuation is minimal, suggesting stable insulin response.",
+  "prediabetic": "Based on intuition, many people might think this individual is diabetic due to the frequent and relatively large spikes in glucose levels. However, they are actually <strong>prediabetic</strong>, which means their glucose levels are higher than normal but not high enough to be classified as diabetic. As we see, this individual is somewhat half and half within the green and yellow zones during their fasting periods and most spikes actually have to do with the fact that this individual eats frequently.",
+  "diabetic": "Many people might think this person is prediabetic due to their relatively constant fasting glucose levels but high average glucose than the normal individual, but they are actually <strong>diabetic</strong>. This is more or less evident from the consistently high glucose levels throughout the day (majority in the yellow zone and occasionally the red). In other words, the glucose levels remain elevated for extended periods, indicating poor glucose regulation and insulin response."
+};
+
 let currentProfile = null;
 let selectedGuess = null;
 const guesses = [];
@@ -86,15 +96,12 @@ const guesses = [];
 function loadNext() {
   if (guesses.length === profiles.length) {
     document.getElementById("quiz-section").style.opacity = 0.3;
-
     const scrollMsg = document.getElementById("scroll-msg");
     scrollMsg.style.display = "block";
     scrollMsg.classList.add("fade-in");
-
     const results = document.getElementById("results-section");
     results.style.display = "block";
     results.classList.add("fade-in");
-
     showResults();
     return;
   }
@@ -127,13 +134,12 @@ function loadNext() {
       .attr("d", line);
 
     const totalLength = path.node().getTotalLength();
-    path
-      .attr("stroke-dasharray", totalLength + " " + totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(2500)
-      .ease(d3.easeCubicInOut)
-      .attr("stroke-dashoffset", 0);
+    path.attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(2500)
+        .ease(d3.easeCubicInOut)
+        .attr("stroke-dashoffset", 0);
 
     chartGroup.selectAll(".food-line").remove();
     chartGroup.selectAll(".food-line")
@@ -152,6 +158,42 @@ function loadNext() {
       .duration(800)
       .attr("y1", 0)
       .attr("y2", height);
+
+    const focus = chartGroup.append("g").style("display", "none");
+    focus.append("circle").attr("r", 4.5).attr("fill", "#1e3a8a");
+
+    svg.on("mousemove", (event) => {
+      const [mx] = d3.pointer(event);
+      const xm = x.invert(mx - margin.left);
+      const bisect = d3.bisector(d => d.time).left;
+      const i = bisect(data, xm, 1);
+      const d0 = data[i - 1], d1 = data[i] || d0;
+      const d = xm - d0.time > d1.time - xm ? d1 : d0;
+
+      focus.style("display", null)
+        .attr("transform", `translate(${x(d.time)},${y(d.glucose)})`);
+
+      tooltip
+        .style("opacity", 1)
+        .html(`
+          <strong>${d3.timeFormat("%-I:%M %p")(d.time)}</strong><br/>
+          Glucose: ${d.glucose} mg/dL<br/>
+          ${d.logged_food ? `
+            <br/><strong>Food:</strong> ${d.logged_food}<br/>
+            Calories: ${d.calorie} kcal<br/>
+            Carbs: ${d.total_carb}g<br/>
+            Sugar: ${d.sugar}g<br/>
+            Protein: ${d.protein}g
+          ` : ""}
+        `)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    });
+
+    svg.on("mouseleave", () => {
+      focus.style("display", "none");
+      tooltip.style("opacity", 0);
+    });
   });
 }
 
@@ -200,7 +242,31 @@ function showResults() {
       .attr("height", 450);
 
     renderResultChart(canvasId, id, profile?.hba1c);
+
+    // Explanation below chart
+    container.append("p")
+      .attr("class", "result-explanation")
+      .style("margin-top", "1rem")
+      .style("font-size", "0.95rem")
+      .style("color", "#374151")
+      .html(`${explanationMap[correctLabel.toLowerCase()]}`);
   });
+    // Final takeaway section
+    section.append("div")
+      .style("padding", "2rem")
+      .style("margin-top", "3rem")
+      .style("background", "#f0f9ff")
+      .style("border-radius", "16px")
+      .style("box-shadow", "0 8px 24px rgba(0, 0, 0, 0.06)")
+      .html(`
+        <h3 style="margin-bottom: 1rem; color: #1e3a8a;">Important Takeaways</h3>
+        <p style="margin-bottom: 1rem;">
+          From what we saw above, not only can glucose trends vary significantly between individuals, they can also be somewhat misleading. While using wearable devices to monitor glucose levels is helpful to get an idea of where you might fall in terms of diabetes, just monitoring glucose trends of an individual on a day-to-day basis is likely not enough for a self-diagnosis. Oftentimes, getting medically tested for HbA1c is a better way to get a more accurate picture of one's glucose regulation.
+        </p>
+        <p style="margin-bottom: 1rem;">
+          That said, even individuals with the same HbA1c can have very different glucose trends and responses to the same food as we will see in the next page. This is because HbA1c is an average measure of glucose levels over a period of time (typically 2-3 months), while daily glucose trends can fluctuate significantly based on diet, activity, stress, and other factors. Therefore, it's important to consider both HbA1c and daily glucose patterns when assessing one's glucose health.
+        </p>
+      `);
 }
 
 function renderResultChart(canvasId, personId, hba1c) {
@@ -232,7 +298,6 @@ function renderResultChart(canvasId, personId, hba1c) {
     g.append("g").attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x).ticks(d3.timeHour.every(2)).tickFormat(d3.timeFormat("%-I %p")));
 
-    // X-axis label
     g.append("text")
       .attr("text-anchor", "middle")
       .attr("x", width / 2)
@@ -242,8 +307,7 @@ function renderResultChart(canvasId, personId, hba1c) {
       .text("Time of Day");
 
     g.append("g").call(d3.axisLeft(y));
-        
-    // Y-axis label
+
     g.append("text")
       .attr("text-anchor", "middle")
       .attr("transform", `rotate(-90)`)
@@ -308,7 +372,58 @@ function renderResultChart(canvasId, personId, hba1c) {
       .attr("fill", "#6b7280")
       .attr("font-size", "1rem")
       .text(`HbA1c: ${hba1c || 'N/A'}`);
+
+    // === Tooltip and hover dot ===
+    const focus = g.append("g").style("display", "none");
+    focus.append("circle")
+      .attr("r", 4.5)
+      .attr("fill", "#1e3a8a");
+
+    const tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+      .style("position", "absolute")
+      .style("pointer-events", "none")
+      .style("background", "#fff")
+      .style("padding", "0.5em 0.75em")
+      .style("border-radius", "6px")
+      .style("box-shadow", "0 2px 8px rgba(0,0,0,0.1)")
+      .style("font-size", "0.9rem");
+
+    svg.on("mousemove", function (event) {
+      const [mx] = d3.pointer(event, this);
+      const xm = x.invert(mx - margin.left);
+      const bisect = d3.bisector(d => d.time).left;
+      const i = bisect(data, xm, 1);
+      const d0 = data[i - 1], d1 = data[i] || d0;
+      const d = xm - d0.time > d1.time - xm ? d1 : d0;
+
+      focus.style("display", null)
+           .attr("transform", `translate(${x(d.time)},${y(d.glucose)})`);
+
+      tooltip
+        .style("opacity", 1)
+        .html(`
+          <strong>${d3.timeFormat("%-I:%M %p")(d.time)}</strong><br/>
+          Glucose: ${d.glucose} mg/dL<br/>
+          ${d.logged_food ? `
+            <br/><strong>Food:</strong> ${d.logged_food}<br/>
+            Calories: ${d.calorie} kcal<br/>
+            Carbs: ${d.total_carb}g<br/>
+            Sugar: ${d.sugar}g<br/>
+            Protein: ${d.protein}g
+          ` : ""}
+        `)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    });
+
+    svg.on("mouseleave", () => {
+      focus.style("display", "none");
+      tooltip.style("opacity", 0);
+    });
   });
 }
+
 
 loadNext();
