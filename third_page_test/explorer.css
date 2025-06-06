@@ -14,7 +14,7 @@ body {
   align-items: center;
   padding: 3rem 1.5rem;
   line-height: 1.6;
-  background-image: url('/assets/106_final_background_2.jpg');
+  background-image: url('../assets/106_final_background_2.jpg');
   background-size: cover;         /* Make sure it fills the screen */
   background-repeat: no-repeat;   /* No tiling */
   background-attachment: fixed;   /* Optional: stays fixed when scrolling */
