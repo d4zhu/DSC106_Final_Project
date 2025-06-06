@@ -95,6 +95,21 @@
   </section>
 
   <script type="module" src="glucose_zones_enhanced.js"></script>
+  <script>
+    const mashImage = document.getElementById("mash-potato");
+  const mashHint = document.getElementById("mash-hint");
+  let poked = false;
+
+  mashImage.addEventListener("click", () => {
+    poked = !poked;
+
+    // Toggle image
+    mashImage.src = poked ? "/assets/mash_poke.png" : "/assets/mash_default.png";
+
+    // Toggle hint visibility
+    mashHint.classList.toggle("visible");
+  });
+  </script>  
 
   <div class="page-nav">
     <a href="../index.html" class="arrow left" title="Go to Home">&#8592;</a>
