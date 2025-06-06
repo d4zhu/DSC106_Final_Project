@@ -141,9 +141,26 @@ d3.csv("../glucose_summary.csv").then(data => {
         .domain([0, d3.max(allPoints, d => d.minutes_after_meal)])
         .range([0, width]);
 
+      g.append("text")
+       .attr("x", width / 2)
+       .attr("y", height + 50)
+       .attr("text-anchor", "middle")
+       .attr("font-size", "14px")
+       .attr("fill", "#374151")
+       .text("Minutes After Meal");
+
       const y = d3.scaleLinear()
         .domain([d3.min(allPoints, d => d.glucose) - 10, d3.max(allPoints, d => d.glucose) + 10])
         .range([height, 0]);
+
+      g.append("text")
+       .attr("transform", "rotate(-90)")
+       .attr("x", -height / 2)
+       .attr("y", -45)
+       .attr("text-anchor", "middle")
+       .attr("font-size", "14px")
+       .attr("fill", "#374151")
+       .text("Glucose (mg/dL)");
 
       g.append("g")
         .attr("transform", `translate(0,${height})`)
