@@ -106,6 +106,8 @@ function loadNext() {
   const remainingProfiles = profiles.filter(p => !guesses.find(g => g.id === p.id));
   const randomIndex = Math.floor(Math.random() * remainingProfiles.length);
   currentProfile = remainingProfiles[randomIndex];
+  document.getElementById("quiz-progress").textContent = `${guesses.length + 1}/${profiles.length}`;
+
 
   d3.json(`../data/${currentProfile.id}_full_day.json`).then(data => {
     data = data.filter(d => d.glucose && d.time);
@@ -293,3 +295,16 @@ function renderResultChart(canvasId, personId, hba1c) {
 }
 
 loadNext();
+
+const mashImage = document.getElementById("mash-potato");
+const mashHint = document.getElementById("mash-hint");
+let poked = false;
+
+if (mashImage && mashHint) {
+  mashImage.addEventListener("click", () => {
+    poked = !poked;
+    mashImage.src = poked ? "../assets/mash_nerd_poke.png" : "../assets/mash_nerd_default.png";
+    mashHint.classList.toggle("visible");
+  });
+}
+
