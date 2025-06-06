@@ -28,8 +28,8 @@
   <section class="mash-intro">
     <div class="mash-content">
       <div class="mash-image mash-hint-container">
-        <img id="mash-potato" src="../assets/mash_poke.png" alt="Mash the Mascot">
-        <div id="mash-hint" class="hidden-hint">🧠 Did you know? Glucose zones are just a snapshot—HbA1c tells the full story!</div>
+        <img id="mash-potato" src="../assets/mash_default.png" alt="Mash the Mascot">
+        <div id="mash-hint" class="hidden-hint">🧠 Did you know? People can have “normal” fasting glucose but still have prediabetes.</div>
       </div>
       <div class="mash-text">
         <h2>HbA1c vs. Glucose Zone 🥔</h2>
@@ -104,7 +104,7 @@
     poked = !poked;
 
     // Toggle image
-    mashImage.src = poked ? "/assets/mash_poke.png" : "/assets/mash_default.png";
+    mashImage.src = poked ? "../assets/mash_nerd_poke.png" : "../assets/mash_default.png";
 
     // Toggle hint visibility
     mashHint.classList.toggle("visible");
