@@ -264,51 +264,6 @@ conclusion.innerHTML = `
   </p>
 `;
 
-
-// const chartContainer = document.querySelector("#trend-container");
-// const conclusion = document.createElement("div");
-// conclusion.style.padding = "2rem";
-// conclusion.style.marginTop = "3rem";
-// conclusion.style.background = "#f0f9ff"; 
-// conclusion.style.borderRadius = "16px";
-// conclusion.style.maxWidth = "900px";
-// conclusion.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.06)";
-// conclusion.style.textAlign = "left"; // ensures left alignment
-
-
-
-
-
-// conclusion.classList.add("conclusion-box");
-// conclusion.innerHTML = `
-//   <h2>Conclusion</h2>
-//   <p>
-//     The postprandial threshold represents the maximum glucose level that should be reached after meals in healthy individuals—typically 140 mg/dL. This visualization shows that average glucose is a strong predictor of post-meal spikes, while standard deviation appears to have minimal influence on spike height.
-//   </p>
-//   <p>
-//     Ultimately, this suggests that diet alone doesn't explain glucose variability. Individuals with similar meals can have very different responses depending on their baseline glucose levels. We hope to spread awareness that managing diabetes risk requires a comprehensive, individualized approach.
-//   </p>
-// `;
-
- 
-
-
-// section.append("div")
-//       .style("padding", "2rem")
-//       .style("margin-top", "3rem")
-//       .style("background", "#f0f9ff")
-//       .style("border-radius", "16px")
-//       .style("box-shadow", "0 8px 24px rgba(0, 0, 0, 0.06)")
-//       .html(`
-//         <h3 style="margin-bottom: 1rem; color: #1e3a8a;">Important Takeaways</h3>
-//         <p style="margin-bottom: 1rem;">
-//         The postprandial threshold represents the maximum glucose level that should be reached after meals in healthy individuals—typically 140 mg/dL. This visualization shows that average glucose is a strong predictor of post-meal spikes, while standard deviation appears to have minimal influence on spike height.
-//         </p>
-//         <p style="margin-bottom: 1rem;">
-//         Ultimately, this suggests that diet alone doesn't explain glucose variability. Individuals with similar meals can have very different responses depending on their baseline glucose levels. We hope to spread awareness that managing diabetes risk requires a comprehensive, individualized approach.
-//         </p>
-//       `);
-
 chartContainer.parentNode.appendChild(conclusion);
 
 
